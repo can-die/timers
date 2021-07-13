@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">timers</string>
+    <string name="period">Period (mm:ss):</string>
+    <string name="add_timer">Add timer</string>
+    <string name="initial_time">%1$s:%2$s</string>
+    <string name="semicolon">:</string>
 </resources>

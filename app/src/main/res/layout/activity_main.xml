@@ -6,13 +6,84 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@id/newTimerButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/timers_item" />
+
     <TextView
+        android:id="@+id/captionView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:layout_marginBottom="28dp"
+        android:layout_marginStart="16dp"
+        android:textSize="20sp"
+        android:inputType="none"
+        android:text="@string/period"
+        app:layout_constraintEnd_toStartOf="@+id/minuteEdit"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        />
+
+    <EditText
+        android:id="@+id/minuteEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:textSize="28sp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:inputType="number"
+        android:maxLength="2"
+        app:layout_constraintEnd_toStartOf="@+id/semicolon"
+        app:layout_constraintStart_toEndOf="@id/captionView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:importantForAutofill="no"
+        tools:text="00" />
+
+    <TextView
+        android:id="@+id/semicolon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:textSize="20sp"
+        android:inputType="none"
+        android:text="@string/semicolon"
+        app:layout_constraintEnd_toStartOf="@+id/secondEdit"
+        app:layout_constraintStart_toEndOf="@id/minuteEdit"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <EditText
+        android:id="@+id/secondEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:textSize="28sp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:inputType="number"
+        android:maxLength="2"
+        app:layout_constraintEnd_toStartOf="@+id/newTimerButton"
+        app:layout_constraintStart_toEndOf="@id/captionView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="00" />
+
+    <Button
+        android:id="@+id/newTimerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/add_timer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintStart_toEndOf="@id/secondEdit" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
