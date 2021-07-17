@@ -1,7 +1,18 @@
 <resources>
-    <string name="app_name">timers</string>
-    <string name="period">Period (mm:ss):</string>
+    <string name="app_name">Pomodoro timers</string>
+    <string name="period">Time (mm:ss):</string>
     <string name="add_timer">Add timer</string>
     <string name="initial_time">%1$s:%2$s</string>
-    <string name="semicolon">:</string>
+    <string name="colon">:</string>
+    <string name="mm">mm</string>
+    <string name="ss">ss</string>
+
+    <string name="blink">blink</string>
+    <string name="reset">reset</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="delete">delete</string>
+
+    <string name="enter_minutes">Please enter valid minutes</string>
+    <string name="enter_seconds">Please enter valid seconds</string>
 </resources>

@@ -2,14 +2,13 @@ package com.example.timers
 
 import android.os.CountDownTimer
 
-class Timer (private val initTime: Long, var isRunning: Boolean = false, val id: Int = nextId++, var currentTime: Long = initTime) {
+class Timer (val initTime: Long, var isRunning: Boolean = false, val id: Int = nextId++,
+             private var currentTime: Long = initTime) {
 
     private var countDown: CountDownTimer? = null
     var holder: ITimerViewHolder? = null
-
-    fun copy(): Timer {
-        return Timer(initTime, isRunning, id, currentTime)
-    }
+    val progress: Long
+        get() = currentTime / 1000
 
     fun start() {
         if (!isRunning) {
@@ -42,8 +41,10 @@ class Timer (private val initTime: Long, var isRunning: Boolean = false, val id:
         return object : CountDownTimer(ms, TICK) {
 
             override fun onTick(millisUntilFinished: Long) {
-                currentTime = millisUntilFinished
+                currentTime = millisUntilFinished + 100L
+                if (currentTime > initTime) currentTime = initTime
                 holder?.setTimerText(getTimerText())
+                holder?.drawTimerProgress(currentTime / 1000)
             }
 
             override fun onFinish() {
@@ -62,18 +63,19 @@ class Timer (private val initTime: Long, var isRunning: Boolean = false, val id:
         val min = ms / 1000 % 3600 / 60
         val sec = ms / 1000 % 60
 
-        return "${displaySlot(hour)}:${displaySlot(min)}:${displaySlot(sec)}"
+        return "${hour.twoDigits()}:${min.twoDigits()}:${sec.twoDigits()}"
     }
 
-    private fun displaySlot(count: Long) = if (count > 9) "$count" else "0$count"
+    private fun Long.twoDigits(): String = this.toString().padStart(2, '0')
 
     private companion object {
-        private const val TICK = 100L
+        private const val TICK = 1000L
         private var nextId = 0
     }
 }
 
 interface ITimerViewHolder {
     fun setTimerText(text: String)
+    fun drawTimerProgress(progress: Long)
     fun drawTimerState(timer: Timer)
 }

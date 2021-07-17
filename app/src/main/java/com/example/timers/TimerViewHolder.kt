@@ -22,6 +22,9 @@ class TimerViewHolder(
                 timer.holder = this
             }
 
+            binding.customView.setPeriod(timer.initTime / 1000)
+            binding.customView.setCurrent(timer.progress)
+
             drawTimerState(timer)
 
             initButtonsListeners(timer)
@@ -30,26 +33,22 @@ class TimerViewHolder(
         private fun initButtonsListeners(timer: Timer) {
 
             binding.startPauseButton.setOnClickListener {
-                val newTimer = timer.copy()
-
                 if (timer.isRunning) {
-                    newTimer.stop()
+                    timer.stop()
                 } else {
-                    newTimer.start()
+                    timer.start()
                 }
-
-                listener.replace(newTimer)
+                listener.replace(timer)
             }
 
-            binding.restartButton.setOnClickListener {
-                val newTimer = timer.copy()
-
-                newTimer.reset()
-
-                listener.replace(newTimer)
+            binding.resetButton.setOnClickListener {
+                timer.reset()
+                listener.replace(timer)
             }
 
-            binding.deleteButton.setOnClickListener { listener.delete(timer) }
+            binding.deleteButton.setOnClickListener {
+                listener.delete(timer)
+            }
         }
 
         override fun drawTimerState(timer: Timer) {
@@ -66,9 +65,10 @@ class TimerViewHolder(
             }
 
             setTimerText(timer.getTimerText())
+            drawTimerProgress(timer.progress)
 
-            if (timer.currentTime == 0L) {
-                itemView.setBackgroundColor(Color.GREEN)
+            if (timer.progress == 0L) {
+                itemView.setBackgroundColor(itemView.resources.getColor(R.color.indigo_A100, null))
             } else {
                 itemView.setBackgroundColor(Color.WHITE)
             }
@@ -78,4 +78,8 @@ class TimerViewHolder(
             binding.time.text = text
         }
 
-    }
+        override fun drawTimerProgress(progress: Long) {
+            binding.customView.setCurrent(progress)
+       }
+
+}

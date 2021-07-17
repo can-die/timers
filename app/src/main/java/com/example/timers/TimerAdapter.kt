@@ -27,7 +27,7 @@ class TimerAdapter(private val listener: ITimerListener): ListAdapter<Timer, Tim
             }
 
             override fun areContentsTheSame(oldItem: Timer, newItem: Timer): Boolean {
-                return oldItem.currentTime == newItem.currentTime &&
+                return oldItem.progress == newItem.progress &&
                         oldItem.isRunning == newItem.isRunning
             }
 

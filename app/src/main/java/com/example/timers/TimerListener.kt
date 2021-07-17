@@ -1,6 +1,6 @@
 package com.example.timers
 
 interface ITimerListener {
-    fun replace(newTimer: Timer)
+    fun replace(timer: Timer)
     fun delete(timer: Timer)
 }
