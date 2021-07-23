@@ -4,7 +4,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_ONE_SHOT
-import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -23,7 +22,7 @@ class ForegroundService : Service() {
 
     private val builder by lazy {
         NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Simple Timer")
+            .setContentTitle("Pomodoro Timer")
             .setGroup("Timer")
             .setGroupSummary(false)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
@@ -63,7 +62,6 @@ class ForegroundService : Service() {
         if (isServiceStarted) {
             return
         }
-        Log.i("TAG", "commandStart()")
         try {
             moveToStartedState()
             startForegroundAndShowNotification()
@@ -92,7 +90,6 @@ class ForegroundService : Service() {
         if (!isServiceStarted) {
             return
         }
-        Log.i("TAG", "commandStop()")
         try {
             job?.cancel()
             stopForeground(true)
@@ -160,7 +157,7 @@ class ForegroundService : Service() {
 
     companion object {
 
-        const val START_TIME = "00:00:00:00"
+        const val START_TIME = "00:00:00"
         const val INVALID = "INVALID"
         const val COMMAND_START = "COMMAND_START"
         const val COMMAND_STOP = "COMMAND_STOP"

@@ -2,7 +2,6 @@ package com.example.timers
 
 import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
-import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.timers.databinding.TimersItemBinding
@@ -10,22 +9,30 @@ import com.example.timers.databinding.TimersItemBinding
 class TimerViewHolder(
         private val binding: TimersItemBinding,
         private val listener: ITimerListener
-): RecyclerView.ViewHolder(binding.root), ITimerViewHolder {
+): RecyclerView.ViewHolder(binding.root) {
 
         private var currentTimer: Timer? = null
 
         fun bind(timer: Timer) {
 
             if (currentTimer != timer) {
-                currentTimer?.holder = null
+                currentTimer?.tickCallback = null
+                currentTimer?.stateCallback = null
                 currentTimer = timer
-                timer.holder = this
+
+                timer.tickCallback = {
+                    setTimerText(timer)
+                    setTimerProgress(timer)
+                }
+                timer.stateCallback = {
+                    setTimerState(timer)
+                }
             }
 
-            binding.customView.setPeriod(timer.initTime / 1000)
+            binding.customView.setPeriod(timer.initTime)
             binding.customView.setCurrent(timer.progress)
 
-            drawTimerState(timer)
+            setTimerState(timer)
 
             initButtonsListeners(timer)
         }
@@ -51,35 +58,41 @@ class TimerViewHolder(
             }
         }
 
-        override fun drawTimerState(timer: Timer) {
+        private fun setTimerState(timer: Timer) {
             if (timer.isRunning) {
+/*
                 val drawable = ContextCompat.getDrawable(itemView.context, R.drawable.ic_baseline_pause_24)
                 binding.startPauseButton.setImageDrawable(drawable)
-                binding.blinkingIndicator.isInvisible = false
+*/
+                binding.startPauseButton.text = itemView.context.getString(R.string.stop)
                 (binding.blinkingIndicator.background as? AnimationDrawable)?.start()
+                binding.blinkingIndicator.isInvisible = false
             } else {
+/*
                 val drawable = ContextCompat.getDrawable(itemView.context, R.drawable.ic_baseline_play_arrow_24)
                 binding.startPauseButton.setImageDrawable(drawable)
+*/
+                binding.startPauseButton.text = itemView.context.getString(R.string.start)
                 binding.blinkingIndicator.isInvisible = true
                 (binding.blinkingIndicator.background as? AnimationDrawable)?.stop()
             }
 
-            setTimerText(timer.getTimerText())
-            drawTimerProgress(timer.progress)
+            setTimerText(timer)
+            setTimerProgress(timer)
 
             if (timer.progress == 0L) {
-                itemView.setBackgroundColor(itemView.resources.getColor(R.color.indigo_A100, null))
+                itemView.setBackgroundColor(itemView.resources.getColor(R.color.blue_200, null))
             } else {
                 itemView.setBackgroundColor(Color.WHITE)
             }
         }
 
-        override fun setTimerText(text: String) {
-            binding.time.text = text
+        private fun setTimerText(timer: Timer) {
+            binding.time.text = timer.text
         }
 
-        override fun drawTimerProgress(progress: Long) {
-            binding.customView.setCurrent(progress)
+        private fun setTimerProgress(timer: Timer) {
+            binding.customView.setCurrent(timer.progress)
        }
 
 }

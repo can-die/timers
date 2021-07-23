@@ -21,8 +21,6 @@ class MainActivity : AppCompatActivity(), ITimerListener, LifecycleObserver {
     private val timerAdapter = TimerAdapter(this)
     private val timers = mutableListOf<Timer>()
 
-    private var startTime = 0L
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -82,17 +80,20 @@ class MainActivity : AppCompatActivity(), ITimerListener, LifecycleObserver {
 
     private fun getCurrentTime(): Long {
         timers.forEach {
-            if (it.isRunning) return it.progress * 1000
+            if (it.isRunning) return it.progress
         }
         return -1
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onAppBackgrounded() {
-        val startIntent = Intent(this, ForegroundService::class.java)
-        startIntent.putExtra(COMMAND_ID, COMMAND_START)
-        startIntent.putExtra(STARTED_TIMER_TIME_MS, getCurrentTime())
-        startService(startIntent)
+        val currentTime = getCurrentTime()
+        if (currentTime != -1L) {
+            val startIntent = Intent(this, ForegroundService::class.java)
+            startIntent.putExtra(COMMAND_ID, COMMAND_START)
+            startIntent.putExtra(STARTED_TIMER_TIME_MS, currentTime)
+            startService(startIntent)
+        }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -102,9 +103,17 @@ class MainActivity : AppCompatActivity(), ITimerListener, LifecycleObserver {
         startService(stopIntent)
     }
 
+    override fun onDestroy() {
+        val stopIntent = Intent(this, ForegroundService::class.java)
+        stopIntent.putExtra(COMMAND_ID, COMMAND_STOP)
+        startService(stopIntent)
+
+        super.onDestroy()
+    }
+
     private companion object {
         private const val INITIAL_TIMER_MINUTES = 0
-        private const val INITIAL_TIMER_SECONDS = 30
+        private const val INITIAL_TIMER_SECONDS = 4
     }
 
 }
