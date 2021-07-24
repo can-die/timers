@@ -34,11 +34,7 @@ class MainActivity : AppCompatActivity(), ITimerListener, LifecycleObserver {
             }
 
             newTimerButton.setOnClickListener {
-                val minutes = minuteEdit.text.toString().toLongOrNull()
-                if (minutes == null) {
-                    Toast.makeText(applicationContext, R.string.enter_minutes, LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
+                val minutes = minuteEdit.text.toString().toLongOrNull() ?: 0L
                 val seconds = secondEdit.text.toString().toLongOrNull()
                 if (seconds == null) {
                     Toast.makeText(applicationContext, R.string.enter_seconds, LENGTH_SHORT).show()
@@ -48,9 +44,10 @@ class MainActivity : AppCompatActivity(), ITimerListener, LifecycleObserver {
                 timers.add(Timer(minutes * 60 * 1000 + seconds * 1000))
                 timerAdapter.submitList(timers.toList())
             }
-
+/*
             minuteEdit.setText(INITIAL_TIMER_MINUTES.toString().padStart(2, '0'))
             secondEdit.setText(INITIAL_TIMER_SECONDS.toString().padStart(2, '0'))
+*/
         }
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
@@ -110,10 +107,10 @@ class MainActivity : AppCompatActivity(), ITimerListener, LifecycleObserver {
 
         super.onDestroy()
     }
-
+/*
     private companion object {
         private const val INITIAL_TIMER_MINUTES = 0
         private const val INITIAL_TIMER_SECONDS = 4
     }
-
+*/
 }
